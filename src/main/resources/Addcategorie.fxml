@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AddCategorie">
+   <children>
+      <TextField fx:id="id_nomcat" focusTraversable="false" layoutX="187.0" layoutY="164.0" prefHeight="42.0" prefWidth="226.0" style="-fx-background-radius: 20;" />
+      <Label layoutX="33.0" layoutY="172.0" prefHeight="28.0" prefWidth="151.0" text="Nom Categorie" />
+      <Button fx:id="id_addcat" layoutX="25.0" layoutY="299.0" mnemonicParsing="false" onAction="#Add_categorie" style="-fx-background-radius: 40;" text="Add Categorie" />
+      <Button fx:id="id_backprod" layoutX="486.0" layoutY="299.0" mnemonicParsing="false" onAction="#redirectToList" prefHeight="36.0" prefWidth="82.0" style="-fx-background-radius: 40;" text=" Produit" />
+      <Button fx:id="id_cataffiche" layoutX="190.0" layoutY="299.0" mnemonicParsing="false" onAction="#Afficher_list_cat" prefHeight="36.0" prefWidth="114.0" style="-fx-background-radius: 40;" text="Afficher list" />
+      <Button fx:id="id_backf" layoutX="343.0" layoutY="299.0" mnemonicParsing="false" onAction="#back_tofront" prefHeight="36.0" prefWidth="100.0" style="-fx-background-radius: 40;" text="Front page" />
+      <ImageView fitHeight="156.0" fitWidth="196.0" layoutX="3.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@img/gym-house-fitness-at-home-logo-design-template-vector.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="436.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@img/dumbbell.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

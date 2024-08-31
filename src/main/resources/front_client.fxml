@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="380.0" prefWidth="860.0" stylesheets="@frontstyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Front_Client">
+   <children>
+      <ImageView fitHeight="381.0" fitWidth="570.0" layoutX="-10.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@img/360_F_234919036_62ysYuy2cn7X88euKP6b7JZHQASbGEPC.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="404.0" fitWidth="563.0" layoutX="301.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@img/1683890744968.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="id_affich" layoutX="694.0" layoutY="90.0" mnemonicParsing="false" onAction="#afficher_produit" style="-fx-background-radius: 40;" text="Afficher le produit" />
+      <Button fx:id="id_cat" layoutX="694.0" layoutY="22.0" mnemonicParsing="false" onAction="#afficher_catview" prefHeight="36.0" prefWidth="144.0" style="-fx-background-radius: 40;" text="Afficher Categorie" />
+      <Label alignment="CENTER" layoutX="8.0" layoutY="231.0" prefHeight="28.0" prefWidth="114.0" text="WELCOME" textFill="#171c56" />
+      <Label layoutX="54.0" layoutY="267.0" prefHeight="28.0" prefWidth="21.0" text="To" />
+      <Label layoutX="12.0" layoutY="306.0" text="GYM HOUSE" textFill="#d17410" />
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="-24.0" layoutY="-24.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@img/noback.png" />
+         </image></ImageView>
+      <Text boundsType="LOGICAL_VERTICAL_CENTER" fontSmoothingType="LCD" layoutX="386.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Découvrez nos offres et produits sportifs, tout à portée de clic !" textOrigin="TOP" wrappingWidth="348.74237060546875">
+         <font>
+            <Font name="System Bold" size="19.0" />
+         </font>
+         <fill>
+            <LinearGradient endX="0.06818183669538207" endY="0.2916666829224789" startY="0.05303036082874646">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="1.0" green="1.0" blue="1.0" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </fill>
+      </Text>
+      <ImageView fitHeight="226.0" fitWidth="216.0" layoutX="275.0" layoutY="159.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@img/718o9iFgH4L-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="141.0" fitWidth="144.0" layoutX="282.0" layoutY="119.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@img/pngtree-special-offer-sale-50-off-extra-discount-png-image_4467063-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="36.0" fitWidth="42.0" layoutX="730.0" layoutY="334.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@img/inst.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="28.0" fitWidth="36.0" layoutX="776.0" layoutY="338.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@img/fc.jpg" />
+         </image>
+      </ImageView>
+      <Text layoutX="583.0" layoutY="358.0" strokeType="OUTSIDE" strokeWidth="0.0" text="contactez nous !!!" />
+   </children>
+</AnchorPane>

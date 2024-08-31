@@ -10,8 +10,8 @@ import java.math.BigDecimal;
 
 public class API_SMS {
     // Find your Account Sid and Token at twilio.com/console
-    public static final String ACCOUNT_SID = "AC321c0a9e13791ebe1e874db4de2c45bd";
-    public static final String AUTH_TOKEN = "49f84f888517366640abaa852b597f59";
+    public static final String ACCOUNT_SID = "";
+    public static final String AUTH_TOKEN = "";
 
 
     public static void sendSMS(String nom) {

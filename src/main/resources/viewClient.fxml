@@ -1,93 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="afficherprod" prefHeight="800.0" prefWidth="1300.0" stylesheets="@frontstyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Viewclient">
+<AnchorPane fx:id="afficherprod" prefHeight="815.0" prefWidth="1112.0" stylesheets="@frontstyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Viewclient">
    <children>
-      <ScrollPane hbarPolicy="ALWAYS" layoutX="220.0" layoutY="57.0" prefHeight="736.0" prefWidth="1318.0" vbarPolicy="ALWAYS">
+      <!-- Background ImageView -->
+      <ImageView fitHeight="821.0" fitWidth="1178.0" layoutX="-6.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="false">
+         <image>
+            <Image url="@img/background.jpg" />
+         </image>
+      </ImageView>
+
+      <!-- Top Image -->
+      <ImageView fitHeight="95.0" fitWidth="1166.0" layoutX="0.0" layoutY="0.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@img/top-banner.jpg" />
+         </image>
+      </ImageView>
+
+      <!-- ScrollPane with transparent FlowPane content -->
+      <ScrollPane hbarPolicy="ALWAYS" layoutX="138.0" layoutY="184.0" opacity="0.89" prefHeight="631.0" prefWidth="898.0" vbarPolicy="ALWAYS">
          <content>
-            <FlowPane fx:id="cardlyout" prefHeight="697.0" prefWidth="1290.0" />
+            <FlowPane fx:id="cardlyout" prefHeight="617.0" prefWidth="876.0" style="-fx-background-color: transparent;" />
          </content>
       </ScrollPane>
-      <GridPane hgap="5.0" layoutX="423.0" layoutY="9.0" prefHeight="42.0" prefWidth="570.0">
-         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="366.000048828125" minWidth="10.0" prefWidth="339.1999267578125" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="84.0" minWidth="0.0" prefWidth="48.40007324218749" />
-            <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" maxWidth="84.0" minWidth="0.0" prefWidth="0.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="159.39999999999998" minWidth="10.0" prefWidth="147.39999999999998" />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-         </rowConstraints>
-         <children>
-            <TextField fx:id="search_text" prefHeight="42.0" prefWidth="275.0" promptText="Search" style="-fx-background-radius: 20;" />
-            <Button fx:id="search_btn" mnemonicParsing="false" onAction="#SearchProducts" prefHeight="36.0" prefWidth="82.0" style="-fx-background-radius: 40;" text="🔍" GridPane.columnIndex="3" />
-         </children>
-      </GridPane>
-      <Button fx:id="id_back" layoutX="74.0" layoutY="385.0" mnemonicParsing="false" onAction="#back_to_front" prefHeight="40.0" prefWidth="58.0" style="-fx-background-radius: 40;" text="🔙" />
-      <Button fx:id="id_reload" layoutX="74.0" layoutY="328.0" mnemonicParsing="false" onAction="#reload_page" prefHeight="40.0" prefWidth="58.0" style="-fx-background-radius: 40;" text="🔄" />
-      <Separator layoutX="2.0" layoutY="376.0" prefHeight="3.0" prefWidth="218.0" />
-      <Separator layoutX="2.0" layoutY="437.0" prefHeight="3.0" prefWidth="218.0" />
-      <Separator layoutX="2.0" layoutY="94.0" prefHeight="3.0" prefWidth="218.0" />
-      <Separator layoutX="2.0" layoutY="317.0" prefHeight="3.0" prefWidth="218.0" />
-      <Separator layoutX="220.0" layoutY="3.0" orientation="VERTICAL" prefHeight="54.0" prefWidth="5.0" />
-      <Button fx:id="id_cat" layoutX="54.0" layoutY="451.0" mnemonicParsing="false" onAction="#go_to_categorie" style="-fx-background-radius: 40;" text="Categories" />
-      <Separator layoutX="2.0" layoutY="502.0" prefHeight="3.0" prefWidth="218.0" />
-      <ImageView fitHeight="54.0" fitWidth="46.0" layoutX="14.0" layoutY="708.0" pickOnBounds="true" preserveRatio="true">
+
+      <!-- Buttons -->
+      <Button fx:id="id_back" layoutX="1088.0" layoutY="21.0" mnemonicParsing="false" onAction="#back_to_front" prefHeight="40.0" prefWidth="58.0" style="-fx-background-radius: 40;" text="🔙" />
+      <Button fx:id="id_reload" layoutX="1018.0" layoutY="23.0" mnemonicParsing="false" onAction="#reload_page" prefHeight="40.0" prefWidth="58.0" style="-fx-background-radius: 40;" text="🔄" />
+
+      <!-- Price Slider -->
+      <Slider fx:id="prixSlider" layoutX="9.0" layoutY="133.0" prefHeight="22.0" prefWidth="210.0" />
+      <Text fill="#080808" layoutX="26.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PRIX" wrappingWidth="77.6" />
+      <Text fx:id="maxPrix" layoutX="159.0" layoutY="121.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MAX" />
+      <Button fx:id="cat1" layoutX="452.0" layoutY="23.0" mnemonicParsing="false" onAction="#cat1" prefHeight="36.0" prefWidth="115.0" style="-fx-background-color: white; -fx-text-fill: #76d155; -fx-font-weight: bold; -fx-font-style: italic;" text="Categories" />
+      <Button fx:id="fav" layoutX="769.0" layoutY="23.0" mnemonicParsing="false" onAction="#fav" prefHeight="36.0" prefWidth="123.0" style="-fx-background-color: white; -fx-text-fill: #76d155; -fx-font-weight: bold; -fx-font-style: italic;" text="Favorites" />
+      <Button fx:id="cat12" layoutX="654.0" layoutY="23.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="108.0" onAction="#pro" style="-fx-background-color: white; -fx-text-fill: #76d155; -fx-font-weight: bold; -fx-font-style: italic;" text="Promotion" />
+      <ImageView fitHeight="205.0" fitWidth="210.0" layoutX="15.0" layoutY="589.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@img/gmail.jpg" />
+            <Image url="@img/sm_5b37b43581a48.jpg" />
          </image>
       </ImageView>
-      <ImageView fitHeight="54.0" fitWidth="46.0" layoutX="80.0" layoutY="707.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@img/fc.jpg" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="54.0" fitWidth="46.0" layoutX="152.0" layoutY="707.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@img/gmail.jpg" />
-         </image>
-      </ImageView>
-      <Label layoutX="39.0" layoutY="653.0" text="contacter-nous" />
-      <ImageView fitHeight="168.0" fitWidth="174.0" layoutX="24.0" layoutY="508.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@img/gym-house-fitness-at-home-logo-design-template-vector.jpg" />
-         </image>
-      </ImageView>
-      <Slider fx:id="prixSlider" layoutX="6.0" layoutY="261.0" prefHeight="22.0" prefWidth="210.0" />
-      <Text fill="#080808" layoutX="14.0" layoutY="230.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PRIX" wrappingWidth="77.59999999999997" />
-      <Text fx:id="maxPrix" layoutX="84.0" layoutY="301.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MAX" />
-      <Label layoutX="10.0" layoutY="9.0" prefHeight="42.0" prefWidth="243.0" text="GET YOUR CONFIDENCE" textFill="#3c0976">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Label>
-      <Label layoutX="89.0" layoutY="138.0" prefHeight="36.0" prefWidth="27.0" text="🛍">
-         <font>
-            <Font size="36.0" />
-         </font>
-      </Label>
-      <Label alignment="CENTER" layoutX="51.0" layoutY="174.0" prefHeight="38.0" prefWidth="103.0" text="Produits " textFill="#5eb47c" />
-      <Label alignment="CENTER" layoutX="93.0" layoutY="223.0" text="🛒" textFill="#5eb47c" />
-      <Text layoutX="124.0" layoutY="300.0" strokeType="OUTSIDE" strokeWidth="0.0" text="DT" />
-      <Label layoutX="76.0" layoutY="42.0" prefHeight="42.0" prefWidth="243.0" text="BACK" textFill="#3c0976">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Label>
+      <TextField fx:id="search_text" layoutX="750.0" layoutY="105.0" prefHeight="42.0" prefWidth="314.0" promptText="Search" style="-fx-background-radius: 20;" />
+      <Button fx:id="search_btn" layoutX="1073.0" layoutY="105.0" mnemonicParsing="false" onAction="#SearchProducts" prefHeight="36.0" prefWidth="77.0" style="-fx-background-radius: 40;" text="🔍" />
+
    </children>
 </AnchorPane>

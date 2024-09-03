@@ -125,7 +125,7 @@ public class ServicesCategorie implements ICategorie<Categorie, Produit> {
                 p.setRef_prod(rs.getInt("ref_prod"));
                 p.setNom_prod(rs.getString("nom_prod"));
                 p.setQuantite(rs.getInt("quantite"));
-                p.setProd_desc(rs.getString("description"));
+                p.setDescription(rs.getString("description"));
                 p.setPrix(rs.getFloat("prix"));
                 p.setImage(rs.getString("image"));
                 p.setCategorie(rs.getInt("id_cat"));
@@ -210,7 +210,7 @@ public class ServicesCategorie implements ICategorie<Categorie, Produit> {
                 produit.setRef_prod(rs.getInt("ref_prod"));
                 produit.setNom_prod(rs.getString("nom_prod"));
                 produit.setQuantite(rs.getInt("quantite"));
-                produit.setProd_desc(rs.getString("description"));
+                produit.setDescription(rs.getString("description"));
                 produit.setPrix(rs.getFloat("prix"));
                 produit.setImage(rs.getString("image"));
                 produit.setCategorie(rs.getInt("id_cat"));

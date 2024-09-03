@@ -66,9 +66,9 @@ public class Update_prod implements Initializable {
     public void setProduit(Produit produit){
         this.produit = produit;
         Image image;
-        String url_imageDirectory = "file:///C:/Users/GADDOUR/Desktop/projetpi/src/main/java/images/";
+        String url_imageDirectory = "file:src/main/resources/img/";
         nom_prod.setText(this.produit.getNom_prod());
-        desc_prod.setText(this.produit.getProd_desc());
+        desc_prod.setText(this.produit.getDescription());
 
         if (this.produit.getImage() != null) {
             String url_image=url_imageDirectory + this.produit.getImage();
@@ -98,65 +98,74 @@ public class Update_prod implements Initializable {
         Double prix = prix_cat.getValue(); // Récupère la valeur en tant que Double
         int id_cat = -1;
         String categorie = categorie_choice.getValue();
+
         for (Categorie cat : list_categorie) {
             if (categorie.equals(cat.getNom_cat())) {
                 id_cat = cat.getId_cat();
                 break;
             }
         }
+
         if (nomprod.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("you must input the Produit 'Name'");
+            alert.setContentText("You must input the Product 'Name'");
             alert.setTitle("Problem");
             alert.setHeaderText(null);
             alert.showAndWait();
         } else if (categorie.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("'Categorie' must be selected");
+            alert.setContentText("'Category' must be selected");
             alert.setTitle("Problem");
             alert.setHeaderText(null);
             alert.showAndWait();
         } else if (descprod.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("'description' must be inputed");
+            alert.setContentText("'Description' must be inputted");
             alert.setTitle("Problem");
             alert.setHeaderText(null);
             alert.showAndWait();
         } else {
             if (file != null) {
-                String destPath = "C:\\Users\\GADDOUR\\Desktop\\projetpi\\src\\main\\java\\images//";
+                String destPath = "src/main/resources/img/"; // Ensure this is correct
                 String imageName = generateUniqueName(file);
                 File dest = new File(destPath + imageName);
                 try {
                     Files.copy(file.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-                    // Mettre à jour le chemin d'accès de l'image dans le produit
-                    this.produit.setImage(imageName);
-
+                    this.produit.setImage(imageName); // Update the image name in the product
                 } catch (IOException ex) {
                     System.out.println(ex.getMessage());
                 }
             }
+
             this.produit.setNom_prod(nomprod);
             this.produit.setQuantite(qunatProd);
-            this.produit.setProd_desc(descprod);
-            this.produit.setPrix(prix.floatValue());// Utilisation directe de la valeur Double
+            this.produit.setDescription(descprod);
+            this.produit.setPrix(prix.floatValue()); // Utilisation directe de la valeur Double
             this.produit.setCategorie(id_cat);
             sp.modifier_produit(this.produit);
 
-            // Mettre à jour les champs de la vue de la carte de produit
+            // Update the fields in the product card view
             nom_prod.setText(nomprod);
             quant_prod.getValueFactory().setValue(qunatProd);
             desc_prod.setText(descprod);
             prix_cat.getValueFactory().setValue(prix);
 
+            // Refresh the image view with the updated image
+            if (this.produit.getImage() != null) {
+                String url_imageDirectory = "file:src/main/resources/img/";
+                String url_image = url_imageDirectory + this.produit.getImage();
+                Image image = new Image(url_image);
+                image_produit.setImage(image);
+            }
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Success");
-            alert.setContentText("Updated .");
+            alert.setContentText("Product updated successfully.");
             alert.setHeaderText(null);
             alert.show();
         }
     }
+
 
     @FXML
     void upload_image(ActionEvent event) {

@@ -10,28 +10,45 @@ public class MyDataBase {
     private final String USERNAME = "root";
     private final String PASSWORD = "";
 
-    Connection cnx;
+    private Connection cnx;
 
     private MyDataBase() {
-
         try {
+            // Initialize the database connection
             cnx = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-
-            System.out.println("Connected ...");
+            System.out.println("Database connected successfully.");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            System.out.println("____not connected____ ");
-
+            // Print detailed error information
+            System.err.println("Database connection error: " + e.getMessage());
+            e.printStackTrace();
         }
-
     }
 
-    public static MyDataBase getInstance(){
-        if (instance == null)
+    // Get the singleton instance
+    public static synchronized MyDataBase getInstance() {
+        if (instance == null) {
             instance = new MyDataBase();
-        return instance ;
+        }
+        return instance;
     }
-    public Connection getCnx(){
+
+    // Get the database connection
+    public Connection getCnx() {
+        // Check if connection is still valid
+        if (cnx != null) {
+            try {
+                if (cnx.isClosed()) {
+                    System.err.println("Connection is closed.");
+                    // Re-establish the connection if needed
+                    cnx = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+                }
+            } catch (SQLException e) {
+                System.err.println("Error checking connection status: " + e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            System.err.println("Connection is null.");
+        }
         return cnx;
     }
 }

@@ -1,49 +1,32 @@
 package controllers;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.FlowPane;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import models.Produit;
-import javafx.event.ActionEvent;
-import services.API_SMS;
-import services.Apisms;
-import services.EmailSender;
 import services.ServicesProduit;
-import utils.MyDataBase;
 
 import java.io.IOException;
-import java.net.URL;
-import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
 
-public class AfficherProd implements Initializable {
-
-    private Produit produit;
-    private Connection connection;
-    ServicesProduit sp = new ServicesProduit();
-    @FXML
-    private AnchorPane afficherprod;
+public class AfficherProd {
 
     @FXML
-    private FlowPane cardlyout;
+    private TableView<Produit> produitTableView;
 
     @FXML
-    private TextField search_text;
-    public static int cat_id = 0;
-
+    private TableColumn<Produit, String> nomProdColumn;
 
     @FXML
     private Slider prixSlider;
@@ -51,220 +34,233 @@ public class AfficherProd implements Initializable {
     @FXML
     private Text maxPrix;
 
-    @FXML
-    void SearchProducts(ActionEvent event) {
-        String searchEntry = search_text.getText();
-        if (searchEntry.isEmpty()) {
-            // If the search entry is empty, reload all products
-            cardlyout.getChildren().clear();
-            loadData();
+    public static int cat_id=0;
 
-        } else {
-            ServicesProduit sp = new ServicesProduit();
-            List<Produit> searchResults = sp.SearchProd(searchEntry);
-            cardlyout.getChildren().clear();
-            if (!searchResults.isEmpty()) {
-                for (Produit produit : searchResults) {
+    @FXML
+    private TableColumn<Produit, String> descProdColumn;
+
+    @FXML
+    private TableColumn<Produit, Integer> quantiteColumn;
+
+    @FXML
+    private TableColumn<Produit, String> imageColumn;
+
+    @FXML
+    private TableColumn<Produit, Double> prixColumn;
+
+    @FXML
+    private TableColumn<Produit, Void> action;
+
+    @FXML
+    private TableColumn<Produit, Void> promoColumn;
+
+    @FXML
+    private TextField search_text;
+
+    @FXML
+    private Button search_btn;
+
+    private ObservableList<Produit> allProduits; // Store the original list of products
+
+    private ServicesProduit servicesProduit = new ServicesProduit();
+
+    @FXML
+    public void initialize() {
+        // Initialize allProduits and set up the TableView
+        allProduits = FXCollections.observableArrayList(servicesProduit.afficherProduits());
+        produitTableView.setItems(allProduits);
+
+        // Set up the columns
+        nomProdColumn.setCellValueFactory(new PropertyValueFactory<>("nom_prod"));
+        descProdColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        quantiteColumn.setCellValueFactory(new PropertyValueFactory<>("quantite"));
+        prixColumn.setCellValueFactory(new PropertyValueFactory<>("prix"));
+
+        // Set up the image column
+        imageColumn.setCellValueFactory(new PropertyValueFactory<>("image"));
+        imageColumn.setCellFactory(param -> new TableCell<>() {
+            private final ImageView imageView = new ImageView();
+
+            @Override
+            protected void updateItem(String imageName, boolean empty) {
+                super.updateItem(imageName, empty);
+
+                if (empty || imageName == null || imageName.isEmpty()) {
+                    setGraphic(null);
+                } else {
+                    String imagePath = "file:src/main/resources/img/" + imageName;
                     try {
-                        FXMLLoader fxmlLoader = new FXMLLoader();
-                        fxmlLoader.setLocation(getClass().getResource("/cardview.fxml"));
-                        HBox produitCard;
-                        produitCard = fxmlLoader.load();
-                        CardViewProd produitCardController = fxmlLoader.getController();
-                        produitCardController.setData(produit);
-                        cardlyout.getChildren().add(produitCard);
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
+                        Image image = new Image(imagePath, true);
+                        imageView.setImage(image);
+                        imageView.setFitHeight(50);
+                        imageView.setFitWidth(50);
+                        setGraphic(imageView);
+                    } catch (Exception e) {
+                        System.out.println("Error loading image: " + e.getMessage());
+                        setGraphic(null);
                     }
-                }
-            } else {
-                // Show a prompt when no search results are found
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Search Results");
-                alert.setHeaderText("No results found.");
-                alert.setContentText("Click OK to display all products.");
-
-                ButtonType okButton = new ButtonType("OK");
-                ButtonType cancelButton = new ButtonType("Cancel");
-
-                alert.getButtonTypes().setAll(okButton, cancelButton);
-
-                alert.showAndWait().ifPresent(buttonType -> {
-                    if (buttonType == okButton) {
-                        // If the OK button is clicked, reload all products
-                        cardlyout.getChildren().clear();
-                        loadData();
-                    }
-                });
-            }
-
-        }
-    }
-
-    @FXML
-    void back_to_add(ActionEvent event) {
-        try {
-            cat_id = 0;
-            Parent root = javafx.fxml.FXMLLoader.load(getClass().getResource("/produit.fxml"));
-            Scene scene = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        }
-    }
-
-    public AfficherProd() {
-        connection = MyDataBase.getInstance().getCnx();
-    }
-
-    @FXML
-    private Button reload_id;
-
-    @FXML
-    void reload_page(ActionEvent event) throws IOException {
-        cardlyout.getChildren().clear();
-        // Recharge les données des produits et les réaffiche dans l'interface
-        loadData();
-    }
-
-    private void loadData() {
-        // Charger les données des produits depuis le service
-        ObservableList<Produit> listeprod = sp.listProduit();
-
-        // Afficher les produits dans la vue
-        for (Produit produit : listeprod) {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/cardview.fxml"));
-                Pane cardView = loader.load();
-                CardViewProd controller = loader.getController();
-                controller.setData(produit);
-                cardlyout.getChildren().add(cardView);
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Your existing initialization code
-        float maxPrice = 0;
-        prixSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            maxPrix.setText(String.valueOf(newValue.intValue()));
-            cardlyout.getChildren().clear();
-            ArrayList<Produit> listeprod = sp.getAll();
-            cardlyout.toFront();
-            cardlyout.setHgap(15);
-            cardlyout.setVgap(15);
-            if (listeprod.isEmpty()) {
-                System.out.println("La liste des produits est vide.");
-            } else {
-                System.out.println("Nombre de produits récupérés depuis la base de données : " + listeprod.size());
-
-                String nomdProd = "Les Stocks des Produits : ";
-
-                for (Produit produit : listeprod) {
-                    if (produit.getQuantite() < 5) {
-                        nomdProd += " " + produit.getNom_prod();
-
-                    }
-                    try {
-                        if (cat_id != 0) {
-                            if (produit.getCategorie() == cat_id && produit.getPrix() < newValue.intValue()) {
-                                FXMLLoader loader = new FXMLLoader(getClass().getResource("/cardview.fxml"));
-                                Pane cardView = loader.load();
-                                CardViewProd controller = loader.getController();
-                                controller.setData(produit);
-                                cardlyout.getChildren().add(cardView);
-                                if (produit.getPrix() < 2) {
-                                    String emailBody = "Le produit " + produit.getNom_prod() + " a un prix inférieur à 2.";
-                                    EmailSender.sendEmail(EmailSender.SMTP_USERNAME, "abdelkader.abidi0000@gmail.com", "Alerte de Prix Bas", emailBody);
-                                }
-                            }
-                        } else {
-                            if (produit.getPrix() < newValue.intValue()) {
-                                FXMLLoader loader = new FXMLLoader(getClass().getResource("/cardview.fxml"));
-                                Pane cardView = loader.load();
-                                CardViewProd controller = loader.getController();
-                                controller.setData(produit);
-                                cardlyout.getChildren().add(cardView);
-
-                            }
-                        }
-                    } catch (IOException e) {
-                        System.out.println(e.getMessage());
-                    }
-                }
-
-                if (!nomdProd.equals("Les Stocks des Produits : ")) {
-                    API_SMS.sendSMS(nomdProd);
-
                 }
             }
         });
 
-        ArrayList<Produit> listeprod = sp.getAll();
-        cardlyout.toFront();
-        cardlyout.setHgap(15);
-        cardlyout.setVgap(15);
-        if (listeprod.isEmpty()) {
-            System.out.println("La liste des produits est vide.");
-        } else {
-            System.out.println("Nombre de produits récupérés depuis la base de données : " + listeprod.size());
+        // Set up the action column
+        action.setCellFactory(param -> new TableCell<>() {
+            private final Button detailsButton = new Button("Details");
+            private final Button modifierButton = new Button("Modifier");
+            private final Button supprimerButton = new Button("Supprimer");
 
-            String nomdProd = "Les Stocks des Produits : ";
+            {
+                detailsButton.setOnAction(event -> {
+                    Produit produit = getTableView().getItems().get(getIndex());
+                    System.out.println("Details for: " + produit.getNom_prod());
+                });
 
-            for (Produit produit : listeprod) {
-                if (produit.getPrix() > maxPrice) {
-                    maxPrice = produit.getPrix();
-                }
-                if (produit.getQuantite() < 5) {
-                    nomdProd += " " + produit.getNom_prod();
-                }
-                try {
-                    if (cat_id != 0) {
-                        if (produit.getCategorie() == cat_id) {
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/cardview.fxml"));
-                            Pane cardView = loader.load();
-                            CardViewProd controller = loader.getController();
-                            controller.setData(produit);
-                            cardlyout.getChildren().add(cardView);
-                            if (produit.getPrix() < 2) {
-                                String emailBody = "Le produit " + produit.getNom_prod() + " a un prix inférieur à 2.";
-                                EmailSender.sendEmail(EmailSender.SMTP_USERNAME, "abdelkader.abidi0000@gmail.com", "Alerte de Prix Bas", emailBody);
-                            }
-                        }
-                    } else {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/cardview.fxml"));
-                        Pane cardView = loader.load();
-                        CardViewProd controller = loader.getController();
-                        controller.setData(produit);
-                        cardlyout.getChildren().add(cardView);
-                        if (produit.getPrix() < 2) {
-                            String emailBody = " Cher Client Le produit " + produit.getNom_prod() + "a un prix inferieur a 2 DT exploiter l'opportunité  dans un clic !!! "+
-                                    "Merci Pour Votre visite " ;
+                modifierButton.setOnAction(event -> {
+                    try {
+                        Produit produit = getTableView().getItems().get(getIndex());
 
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/update_prod.fxml"));
+                        Parent root = loader.load();
 
-                            EmailSender.sendEmail(EmailSender.SMTP_USERNAME, "abdelkader.abidi0000@gmail.com", "Alerte de Prix Bas", emailBody);
-                        }
+                        Update_prod updateProdController = loader.getController();
+                        updateProdController.setProduit(produit);
+
+                        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                        Scene scene = new Scene(root);
+                        stage.setScene(scene);
+                        stage.show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                } catch (IOException e) {
-                    System.out.println(e.getMessage());
-                }
+                });
+
+                supprimerButton.setOnAction(event -> {
+                    Produit produit = getTableView().getItems().get(getIndex());
+                    if (produit != null) {
+                        // Confirm the deletion with the user
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Confirmation Dialog");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Are you sure you want to delete " + produit.getNom_prod() + "?");
+
+                        // Show the confirmation dialog
+                        alert.showAndWait().ifPresent(response -> {
+                            if (response == ButtonType.OK) {
+                                // Delete from the database
+                                servicesProduit.supprimer_produit1(produit.getRef_prod()); // Assuming you have a method that takes a product reference
+
+                                // Remove from the TableView
+                                produitTableView.getItems().remove(produit);
+
+                                // Optionally, refresh the TableView or reload the product list
+                                allProduits.remove(produit);
+                                produitTableView.setItems(allProduits);
+                            }
+                        });
+                    }
+                });
+
             }
 
-            if (!nomdProd.equals("Les Stocks des Produits : ")) {
-                API_SMS.sendSMS(nomdProd);
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    HBox hbox = new HBox(5, detailsButton, modifierButton, supprimerButton);
+                    setGraphic(hbox);
+                }
+            }
+        });
+
+        // Set up the promo column
+        promoColumn.setCellFactory(param -> new TableCell<>() {
+            private final Button promoButton = new Button();
+
+            {
+                promoButton.setOnAction(event -> {
+                    Produit produit = getTableView().getItems().get(getIndex());
+                    togglePromotion(produit);
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getTableView() == null) {
+                    setGraphic(null);
+                } else {
+                    Produit produit = getTableView().getItems().get(getIndex());
+                    promoButton.setText(produit.isEn_promo() ? "No" : "Yes");
+                    setGraphic(promoButton);
+                }
+            }
+        });
+
+        // Add listener to update filter when slider value changes
+        prixSlider.valueProperty().addListener((obs, oldValue, newValue) -> filterByPrice());
+
+        // Add listener to search text field
+        search_btn.setOnAction(event -> performSearch());
+    }
+
+    private void togglePromotion(Produit produit) {
+        produit.setEn_promo(!produit.isEn_promo());
+        servicesProduit.modifier_produit1(produit);
+        produitTableView.refresh();
+    }
+
+    private void performSearch() {
+        String searchText = search_text.getText().toLowerCase();
+        ObservableList<Produit> filteredProducts = allProduits.filtered(produit ->
+                produit.getNom_prod().toLowerCase().contains(searchText));
+        produitTableView.setItems(filteredProducts);
+    }
+
+    private void filterByPrice() {
+        double maxPrice = prixSlider.getValue();
+        if (maxPrix != null) {
+            maxPrix.setText(String.format("Max Price: %.2f", maxPrice));
+        }
+
+        ObservableList<Produit> filteredProduits = FXCollections.observableArrayList();
+        for (Produit produit : allProduits) {
+            if (produit.getPrix() <= maxPrice) {
+                filteredProduits.add(produit);
             }
         }
-        prixSlider.setMax(maxPrice);
-        prixSlider.setValue(maxPrice);
-        maxPrix.setText(String.valueOf(maxPrice));
+        produitTableView.setItems(filteredProduits);
+    }
+
+    public void back(ActionEvent event) throws IOException {
+        Parent afficherCatParent = FXMLLoader.load(getClass().getResource("/frontPage.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(afficherCatParent);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void cate(ActionEvent event) throws IOException {
+        Parent afficherCatParent = FXMLLoader.load(getClass().getResource("/afficherCat.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(afficherCatParent);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void stat(ActionEvent event) throws IOException {
+        Parent afficherCatParent = FXMLLoader.load(getClass().getResource("/stats.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(afficherCatParent);
+        stage.setScene(scene);
+        stage.show();
+    }
+    public void ajj(ActionEvent event) throws IOException {
+        Parent afficherCatParent = FXMLLoader.load(getClass().getResource("/produit.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(afficherCatParent);
+        stage.setScene(scene);
+        stage.show();
     }
 }
-
-
-

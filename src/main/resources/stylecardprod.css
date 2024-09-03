@@ -1,49 +1,52 @@
 /* Global styles */
 .root {
-    -fx-background-color: #ffff;
-    -fx-font-family: 'Sofia Sans Condensed SemiBold', sans-serif;
-    -fx-font-size: 18px;
+    -fx-background-color: #f5f5f5; /* Light background color */
+    -fx-font-family: 'Sofia Sans Condensed', sans-serif;
+    -fx-font-size: 16px; /* Slightly smaller font size */
 }
 
 /* Button styles */
-/* Button styles */
-/* Button styles */
 .button {
-    -fx-background-color: #EC744A;
-    -fx-background-radius: 8px; /* Reduce background radius */
+    -fx-background-color: #EC744A; /* Modern green color */
+    -fx-background-radius: 5px; /* Reduce background radius for a cleaner look */
     -fx-text-fill: #ffffff;
-    -fx-font-size: 14px; /* Reduce font size */
-    -fx-padding: 8px 16px; /* Reduced padding */
-    -fx-border-radius: 3px; /* Reduce border radius */
+    -fx-font-size: 12px; /* Smaller font size */
+    -fx-padding: 6px 12px; /* Reduced padding */
+    -fx-border-radius: 3px; /* Slight border radius */
     -fx-cursor: pointer;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 1); /* Reduced shadow */
-    -fx-transition: all 0.3s;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 1); /* Subtle shadow */
+    -fx-transition: all 0.3s ease;
 }
 
 .button:hover {
-    -fx-background-color: #d05d3d;
+    -fx-background-color: #45a049; /* Slightly darker green on hover */
 }
 
 /* Label styles */
 .label {
-    -fx-text-fill: #ffff; /* Couleur du texte en noir */
-    -fx-font-size: 19px;
+    -fx-text-fill: #333333; /* Darker text color for better readability */
+    -fx-font-size: 14px; /* Slightly smaller font size */
 }
 
+/* Card styles */
+/* Card styles */
+/* Card styles */
 #produit_Hbox {
-    -fx-pref-width: 355px;
-    -fx-pref-height: 200px;
-    -fx-background-color: #ffffff; /* Card background color */
-    -fx-border-radius: 10px;
-    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1) , 10,0,0,1 ); /* Shadow effect */
-    -fx-padding: 20px; /* Add padding inside the card */
-    -fx-spacing: 10px;
-    -fx-alignment: center;
-    -fx-transition: all 0.3s ease; /* Add smooth transition */
+    -fx-pref-width: 280px; /* Smaller width */
+    -fx-pref-height: 150px; /* Smaller height */
+    -fx-background-color: #f9f9f9; /* Very light gray, near white */
+    -fx-border-radius: 8px; /* Rounded corners */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 6, 0, 0, 1); /* Very subtle shadow */
+    -fx-padding: 15px; /* Padding inside the card */
+    -fx-spacing: 8px; /* Spacing between elements */
+    -fx-alignment: center; /* Center content alignment */
+    -fx-transition: all 0.3s ease; /* Smooth transition */
 }
 
 #produit_Hbox:hover {
-    -fx-scale-x: 1.05; /* Add hover effect */
-    -fx-scale-y: 1.05; /* Add hover effect */
-    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.2) , 20,0,0,1 ); /* Increase shadow on hover */
+    -fx-scale-x: 1.03; /* Slightly increase size on hover */
+    -fx-scale-y: 1.03; /* Slightly increase size on hover */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 1); /* Slightly increased shadow on hover */
+
 }
+

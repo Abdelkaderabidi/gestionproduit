@@ -1,47 +1,30 @@
 package controllers;
 
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.paint.Color;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 
-import javafx.scene.image.Image;
-import javax.imageio.ImageIO;
 import java.io.*;
 import java.nio.file.Files;
-import java.util.Base64;
-import javafx.scene.Node;
-import javafx.scene.layout.FlowPane;
-import javafx.stage.FileChooser;
+
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import models.Produit;
-import services.API_SMS;
 import services.ServicesProduit;
 
-import javafx.scene.image.Image;
-import javax.imageio.ImageIO;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Optional;
-import java.util.ResourceBundle;
 import java.io.File;
 
 public class CardViewProd   {
@@ -135,11 +118,11 @@ public class CardViewProd   {
         nom_card.setText(produit.getNom_prod());
         prix_card.setText(String.valueOf(produit.getPrix())+"DT");
         quant_card.setText(String.valueOf(produit.getQuantite()));
-        desc_card.setText(produit.getProd_desc());
+        desc_card.setText(produit.getDescription());
         produit_Hbox.setStyle("-fx-background-color:#9d9f9e; -fx-background-radius: 20; -fx-effect: dropShadow(three-pass-box, rgba(0,0,0,0.3), 10, 0 , 0 ,10);");
 
         if (produit.getImage() != null) {
-            String image_directory_path = "C:/Users/GADDOUR/Desktop/projetpi/src/main/java/images/";
+            String image_directory_path = "src/main/resources/img/";
             String full_path = image_directory_path + produit.getImage();
             try {
                 Image img = new Image(new File(full_path).toURI().toString());

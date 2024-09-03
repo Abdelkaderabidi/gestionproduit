@@ -3,26 +3,15 @@ package services;
 import interfaces.IProduit;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.image.Image;
 import models.Produit;
 import utils.MyDataBase;
 
-import javax.imageio.ImageIO;
-import javax.sql.rowset.serial.SerialBlob;
-import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
 
 
-import javafx.scene.image.Image;
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-import java.io.ByteArrayOutputStream;
-import java.sql.Blob;
 import java.sql.SQLException;
-import javax.sql.rowset.serial.SerialBlob;
 
 public class ServicesProduit implements IProduit<Produit> {
     private Connection cnx;
@@ -32,14 +21,16 @@ public class ServicesProduit implements IProduit<Produit> {
     public void add(Produit produit) {
 
         try {
-            String qry = "INSERT INTO `produit`(`nom_prod`, `quantite`, `description`, `prix`, `image`, `id_cat`) VALUES (?,?,?,?,?,?)";
+            String qry = "INSERT INTO `produit`(`nom_prod`, `quantite`, `description`, `prix`, `image`, `id_cat`, `fav`) VALUES (?,?,?,?,?,?,?)";
             PreparedStatement stm = cnx.prepareStatement(qry);
             stm.setString(1,produit.getNom_prod());
             stm.setInt(2,produit.getQuantite());
-            stm.setString(3,produit.getProd_desc());
+            stm.setString(3,produit.getDescription());
             stm.setFloat(4,produit.getPrix());
             stm.setString(5,produit.getImage());
             stm.setInt(6,produit.getCategorie());
+            stm.setInt(7,produit.getFav());
+
             stm.executeUpdate();
             System.out.println("produit ajoutÃ© !");
 
@@ -62,7 +53,7 @@ public class ServicesProduit implements IProduit<Produit> {
                 p.setRef_prod(rs.getInt("ref_prod"));
                 p.setNom_prod(rs.getString("nom_prod"));
                 p.setQuantite(rs.getInt("quantite"));
-                p.setProd_desc(rs.getString("description"));
+                p.setDescription(rs.getString("description"));
                 p.setPrix(rs.getFloat("prix"));
                 p.setImage(rs.getString("image"));
                 p.setCategorie(rs.getInt("id_cat"));
@@ -75,6 +66,78 @@ public class ServicesProduit implements IProduit<Produit> {
 
         return produits;
     }
+
+    public ObservableList<Produit> listFavoriteProducts() {
+        ObservableList<Produit> mylist = FXCollections.observableArrayList();
+        try {
+            String qry = "SELECT * FROM `produit` WHERE fav > 0";
+            Statement stm = cnx.createStatement();
+            ResultSet rs = stm.executeQuery(qry);
+            while (rs.next()) {
+                Produit p = new Produit();
+                p.setRef_prod(rs.getInt("ref_prod"));
+                p.setNom_prod(rs.getString("nom_prod"));
+                p.setQuantite(rs.getInt("quantite"));
+                p.setDescription(rs.getString("description"));
+                p.setPrix(rs.getFloat("prix"));
+                p.setImage(rs.getString("image"));
+                p.setCategorie(rs.getInt("id_cat"));
+
+                mylist.add(p);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return mylist;
+    }
+    public ObservableList<Produit> listpromo() {
+        ObservableList<Produit> mylist = FXCollections.observableArrayList();
+        try {
+            String qry = "SELECT * FROM `produit` WHERE en_promo = 1";
+            Statement stm = cnx.createStatement();
+            ResultSet rs = stm.executeQuery(qry);
+            while (rs.next()) {
+                Produit p = new Produit();
+                p.setRef_prod(rs.getInt("ref_prod"));
+                p.setNom_prod(rs.getString("nom_prod"));
+                p.setQuantite(rs.getInt("quantite"));
+                p.setDescription(rs.getString("description"));
+                p.setPrix(rs.getFloat("prix"));
+                p.setImage(rs.getString("image"));
+                p.setCategorie(rs.getInt("id_cat"));
+
+                mylist.add(p);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return mylist;
+    }
+
+    public ArrayList<Produit> afficherProduits() {
+        String qry = "SELECT * FROM `produit`";
+        ArrayList<Produit> produits = new ArrayList<>();
+        try {
+            Statement stm = cnx.createStatement();
+            ResultSet rs = stm.executeQuery(qry);
+            while (rs.next()) {
+                Produit p = new Produit();
+                p.setRef_prod(rs.getInt("ref_prod"));
+                p.setNom_prod(rs.getString("nom_prod"));
+                p.setQuantite(rs.getInt("quantite"));
+                p.setDescription(rs.getString("description"));
+                p.setPrix(rs.getFloat("prix"));
+                p.setImage(rs.getString("image"));
+                p.setCategorie(rs.getInt("id_cat"));
+                produits.add(p);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return produits;
+    }
+
+
     public ArrayList<Produit> getprod(int idcat) {
         String qry = "SELECT * FROM `produit` WHERE  id_cat = ?";
         ArrayList<Produit> produits = new ArrayList<>();
@@ -87,7 +150,7 @@ public class ServicesProduit implements IProduit<Produit> {
                 p.setRef_prod(rs.getInt(1));
                 p.setNom_prod(rs.getString(2));
                 p.setQuantite(rs.getInt(3));
-                p.setProd_desc(rs.getString("description"));
+                p.setDescription(rs.getString("description"));
                 p.setPrix(rs.getFloat(5));
                 p.setImage(rs.getString("image"));
                 p.setCategorie(rs.getInt(7));
@@ -127,7 +190,7 @@ public class ServicesProduit implements IProduit<Produit> {
                 p.setRef_prod(rs.getInt("ref_prod"));
                 p.setNom_prod(rs.getString("nom_prod"));
                 p.setQuantite(rs.getInt("quantite"));
-                p.setProd_desc(rs.getString("description"));
+                p.setDescription(rs.getString("description"));
                 p.setPrix(rs.getFloat("prix"));
                 p.setImage(rs.getString("image"));
                 p.setCategorie(rs.getInt("id_cat"));
@@ -182,7 +245,7 @@ public class ServicesProduit implements IProduit<Produit> {
                 p.setRef_prod(rs.getInt("ref_prod"));
                 p.setNom_prod(rs.getString("nom_prod"));
                 p.setQuantite(rs.getInt("quantite"));
-                p.setProd_desc(rs.getString("description"));
+                p.setDescription(rs.getString("description"));
                 p.setPrix(rs.getFloat("prix"));
                 p.setImage(rs.getString("image"));
                 p.setCategorie(rs.getInt("id_cat"));
@@ -203,7 +266,7 @@ public class ServicesProduit implements IProduit<Produit> {
             PreparedStatement stm = cnx.prepareStatement(qry);
             stm.setString(1,produit.getNom_prod());
             stm.setInt(2,produit.getQuantite());
-            stm.setString(3,produit.getProd_desc());
+            stm.setString(3,produit.getDescription());
             stm.setFloat(4,produit.getPrix());
             stm.setString(5,produit.getImage());
             stm.setInt(6,produit.getRef_prod());
@@ -219,17 +282,66 @@ public class ServicesProduit implements IProduit<Produit> {
             PreparedStatement stm = cnx.prepareStatement(qry);
             stm.setString(1,produit.getNom_prod());
             stm.setInt(2,produit.getQuantite());
-            stm.setString(3,produit.getProd_desc());
+            stm.setString(3,produit.getDescription());
             stm.setFloat(4,produit.getPrix());
             stm.setString(5,produit.getImage());
             stm.setInt(6,produit.getCategorie());
             stm.setInt(7,produit.getRef_prod());
             stm.executeUpdate();
-            System.out.println("Produit modifiÃ© !");
+            System.out.println("Produit modifier!");
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
     }
+
+    public void modifier_produit1(Produit produit) {
+        PreparedStatement statement = null;
+        try {
+            Connection connection = MyDataBase.getInstance().getCnx();
+
+            // Check if the connection is valid
+            if (connection == null || connection.isClosed()) {
+                throw new SQLException("Connection is not available.");
+            }
+
+            String query = "UPDATE produit SET en_promo = ? WHERE ref_prod = ?";
+            statement = connection.prepareStatement(query);
+
+            // Set the values for the query
+            statement.setInt(1, produit.isEn_promo() ? 1 : 0);
+            statement.setInt(2, produit.getRef_prod());
+
+            // Execute the update
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            // Ensure resources are closed but not the connection
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void supprimer_produit1(int produitId) {
+        // Your implementation to delete a product from the database
+        String query = "DELETE FROM produit WHERE ref_prod = ?";
+        try (Connection conn = MyDataBase.getInstance().getCnx();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, produitId);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
 
     public int prodparcat(int id){
         int n = 0;
@@ -258,7 +370,7 @@ public class ServicesProduit implements IProduit<Produit> {
             String query = "UPDATE produit SET nom_prod =?, quantite = ?, description = ?, prix = ?,image = ? WHERE ref_prod="+ref_prod;
             stmt = conn.prepareStatement(query);
             stmt.setString(1, produit.getNom_prod());
-            stmt.setString(3, produit.getProd_desc());
+            stmt.setString(3, produit.getDescription());
             stmt.setInt(2, produit.getQuantite());
             stmt.setFloat(4, produit.getPrix());
             stmt.setString(5,produit.getImage());

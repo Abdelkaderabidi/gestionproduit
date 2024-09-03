@@ -12,7 +12,7 @@
             <FlowPane fx:id="cardlayout" prefHeight="658.0" prefWidth="1514.0" />
          </content>
       </ScrollPane>
-      <Button fx:id="id_back" layoutY="1.0" mnemonicParsing="false" onAction="#back_to_add" prefHeight="36.0" prefWidth="64.0" style="-fx-background-radius: 40;" text="🔙" />
+      <Button fx:id="id_back" layoutY="1.0" mnemonicParsing="false" onAction="#back_home" prefHeight="36.0" prefWidth="64.0" style="-fx-background-radius: 40;" text="🔙" />
       <Button fx:id="id_reload" layoutX="78.0" layoutY="1.0" mnemonicParsing="false" onAction="#reload_page" prefHeight="36.0" prefWidth="64.0" style="-fx-background-radius: 40;" text="🔄" />
    </children>
 </AnchorPane>

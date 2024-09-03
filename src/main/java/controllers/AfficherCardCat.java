@@ -40,9 +40,9 @@ public class AfficherCardCat implements Initializable {
     private AnchorPane id_anchor;
 
     @FXML
-    void back_to_add(ActionEvent event) {
+    void back_home(ActionEvent event) {
         try {
-            Parent root = javafx.fxml.FXMLLoader.load(getClass().getResource("/Addcategorie.fxml"));
+            Parent root = javafx.fxml.FXMLLoader.load(getClass().getResource("/frontpage.fxml"));
             Scene scene = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);

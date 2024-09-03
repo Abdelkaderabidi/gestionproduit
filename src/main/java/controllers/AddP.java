@@ -107,7 +107,7 @@ public class AddP implements Initializable {
             alert.showAndWait();
         } else {
             if (file != null) {
-                String destPath = "C:\\Users\\GADDOUR\\Desktop\\projetpi\\src\\main\\java\\images//";
+                String destPath = "src/main/resources/img/";
                 String imageName = generateUniqueName(file);
                 File dest = new File(destPath + imageName);
                 try {
